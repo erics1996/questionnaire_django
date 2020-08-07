@@ -20,7 +20,7 @@ class Survey(models.Model):
     count = models.PositiveSmallIntegerField(verbose_name='生成多少个唯一码')
     add_time = models.DateTimeField(auto_now_add=True, verbose_name='添加的时间')
     grade = models.ForeignKey('ClassList', on_delete=models.CASCADE, verbose_name='外键关联班级表')
-    survey_template = models.ForeignKey('SurveyTemplate', on_delete=models.CASCADE, verbose_name='外键关联的模板表')
+    survey_template = models.ManyToManyField('SurveyTemplate', blank=True, verbose_name='外键关联的模板表')
 
 
 class SurveyCode(models.Model):
