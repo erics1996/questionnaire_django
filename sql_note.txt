@@ -1,0 +1,1 @@
+create database questionnaire default charset utf8mb4;
