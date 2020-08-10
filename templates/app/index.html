@@ -1,0 +1,39 @@
+{% extends 'app/public/layout.html' %}
+{% block content %}
+<template>
+    <el-table :data="tableData" style="width: 100%;">
+        <el-table-column v-for="(item,index) in tableColumn" :prop="item.prop" :label="item.label"></el-table-column>
+        <el-table-column label="操作">
+            <template slot-scope="scope">
+                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
+                </el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+</template>
+{% endblock %}
+{% block js %}
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            tableColumn: [],
+            tableData: [],
+        },
+        mounted() {//mounted类似Django进入路由之前经过的中间件，之前有些东西已经加载好了，所以可以用mounted来做（mounted是vue生命周期的一个回调方法）
+            this.initData()//this指的是当前vue实例，如果用beforecreate和created可能this都不存在
+        },
+        methods: {//方法集
+            initData() {
+                let vm = this;//vue实例
+                axios.get('/api/surveys/').then(function (response) {
+                    console.log(response)
+                    vm.tableData = response.data.data.table_data
+                    vm.tableColumn = response.data.data.table_column
+                })
+            }
+        }
+    })
+</script>
+{% endblock %}
