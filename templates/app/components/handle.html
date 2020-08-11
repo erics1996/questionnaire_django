@@ -1,0 +1,6 @@
+<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">
+    <a class="btn btn-primary" href="{{ report_link }}">查看报告</a>
+</el-button>
+<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">
+    <a class="btn btn-danger" href="{{ download_link }}">下载</a>
+</el-button>

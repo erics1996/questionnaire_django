@@ -2,13 +2,11 @@
 {% block content %}
 <template>
     <el-table :data="tableData" style="width: 100%;">
-        <el-table-column v-for="(item,index) in tableColumn" :prop="item.prop" :label="item.label"></el-table-column>
-        <el-table-column label="操作">
-            <template slot-scope="scope">
-                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除
-                </el-button>
+        <el-table-column v-for="(item,index) in tableColumn" :prop="item.prop" :label="item.label">
+            <template slot-scope="data">
+                <div v-html="data.row[item.prop]"></div>
             </template>
+      </template>
         </el-table-column>
     </el-table>
 </template>

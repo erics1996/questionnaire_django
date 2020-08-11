@@ -3,6 +3,8 @@ from ..serializers import basic
 from app import models
 from rest_framework.response import Response
 
+"""从apiView可以知道rest_framework中的settings"""
+
 
 class SurveysApi(ListAPIView):
     """
@@ -12,29 +14,29 @@ class SurveysApi(ListAPIView):
     serializer_class = basic.SurveySerializer
     table_column = [
         {
-            'prop': 'add_time',
-            'label': '日期'
-        },
-        {
-            'prop': 'count',
-            'label': '唯一码数量'
-        },
-        {
             'prop': 'grade',
-            'label': '班级'
-        },
-        {
-            'prop': 'id',
-            'label': '编号'
-        },
-        {
-            'prop': 'survey_template',
-            'label': '模板'
+            'label': '问卷调查的班级'
         },
         {
             'prop': 'times',
-            'label': '次数'
-        }
+            'label': '第几次问卷调查'
+        },
+        {
+            'prop': 'valid_count',
+            'label': '填写人数'
+        },
+        {
+            'prop': 'handle_link',
+            'label': '填写链接'
+        },
+        {
+            'prop': 'add_time',
+            'label': '创建时间'
+        },
+        {
+            'prop': 'handle',
+            'label': '操作'
+        },
     ]
 
     def list(self, request, *args, **kwargs):

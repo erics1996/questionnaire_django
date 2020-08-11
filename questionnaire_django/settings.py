@@ -132,3 +132,6 @@ STATICFILES_DIR = [
 ]
 MEDIA_DIR = '/static/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+REST_FRAMEWORK = {
+    'DATE_FORMAT': '%Y-%m-%d %X',  # 这样配置时间没用
+}
