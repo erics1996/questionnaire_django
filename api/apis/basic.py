@@ -2,8 +2,21 @@ from rest_framework.generics import ListAPIView
 from ..serializers import basic
 from app import models
 from rest_framework.response import Response
+from rest_framework import filters
 
 """从apiView可以知道rest_framework中的settings"""
+
+
+class CustomFilter(filters.BaseFilterBackend):
+    def filter_queryset(self, request, qs, view):
+        """
+        自定义的过滤器
+        :param request:
+        :param qs:
+        :param view:
+        :return:
+        """
+        return qs
 
 
 class SurveysApi(ListAPIView):
@@ -12,6 +25,10 @@ class SurveysApi(ListAPIView):
     """
     queryset = models.Survey.objects.all()
     serializer_class = basic.SurveySerializer
+    # 过滤器
+    filter_backends = (filters.SearchFilter, CustomFilter)
+    # 过滤的字段。配合filters.SearchFilter使用，如果想要支持更多的字段搜索，添加字段名称即可
+    search_fields = ('grade__name',)
     table_column = [
         {
             'prop': 'grade',
@@ -48,7 +65,8 @@ class SurveysApi(ListAPIView):
         :return:
         """
         # queryset = self.filter_queryset(self.get_queryset())  # self.get_queryset()返回一个queryset；filter_queryset：过滤queryset，返回的还是queryset；本质上就是调用self.queryset
-        queryset = self.get_queryset()  # 不要用 queryset = self.queryset，虽然本质上是一样的，不能直接调用
+        # queryset = self.get_queryset()  # 不要用 queryset = self.queryset，虽然本质上是一样的，不能直接调用
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)  # 本质上也就是调用序列化类做实例化
         # return Response(serializer.data)
         return Response({
