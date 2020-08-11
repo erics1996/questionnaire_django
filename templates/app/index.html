@@ -11,8 +11,8 @@
 </div>
 <hr>
 <template>
-    <el-table :data="tableData" style="width: 100%;">
-        <el-table-column v-for="(item,index) in tableColumn" :prop="item.prop" :label="item.label">
+    <el-table :data="tableData" style="width: 100%;" @sort-change="orderingData">
+        <el-table-column v-for="(item,index) in tableColumn" :prop="item.prop" :label="item.label" sortable>
             <template slot-scope="data">
                 <div v-html="data.row[item.prop]"></div>
             </template>
@@ -32,8 +32,9 @@
             tableData: [],
             search: '',
             total: 0,
-            limit: 1,
+            limit: 2,
             offset: 0,
+            ordering: ''
         },
         mounted() {//mounted类似Django进入路由之前经过的中间件，之前有些东西已经加载好了，所以可以用mounted来做（mounted是vue生命周期的一个回调方法）
             this.initData()//this指的是当前vue实例，如果用beforecreate和created可能this都不存在
@@ -41,22 +42,32 @@
         methods: {//方法集
             initData() {
                 let vm = this;//vue实例
-                axios.get(`/api/surveys/?search=${vm.search}&limit=${vm.limit}&offset=${vm.offset}`).then(function (response) {
+                axios.get(`/api/surveys/?search=${vm.search}&limit=${vm.limit}&offset=${vm.offset}&order=${vm.ordering}`).then(function (response) {
                     // console.log(response)
-                    vm.total = response.data.data.table_data.total
-                    vm.tableData = response.data.data.table_data.data
-                    vm.tableColumn = response.data.data.table_column
+                    vm.total = response.data.data.table_data.total;
+                    vm.tableData = response.data.data.table_data.data;
+                    vm.tableColumn = response.data.data.table_column;
                 })
             },
             changePage(page) {
                 //console.log(page)//page是当前页
-                this.offset = (page - 1) * this.limit
-                this.initData()
+                this.offset = (page - 1) * this.limit;
+                this.initData();
             },
             searchData() {
                 //重置offset
-                this.offset = 0
-                this.initData()
+                this.offset = 0;
+                this.initData();
+            },
+            orderingData(column) {
+                console.log(column);
+                if (column.order === null) {
+                    this.ordering = ''
+                } else {
+                    let orderColumn = column.order === 'ascending' ? column.prop : `-${column.prop}`;
+                    this.ordering = orderColumn;
+                }
+                this.initData();
             }
         }
     })
