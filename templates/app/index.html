@@ -1,15 +1,27 @@
 {% extends 'app/public/layout.html' %}
 {% block content %}
+<div class="form-inline">
+    <div class="form-group">
+        <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+        <div class="input-group">
+            <input type="text" class="form-control" id="exampleInputAmount" placeholder="" v-model="search">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success" @click="searchData">查询</button>
+</div>
+<hr>
 <template>
     <el-table :data="tableData" style="width: 100%;">
         <el-table-column v-for="(item,index) in tableColumn" :prop="item.prop" :label="item.label">
             <template slot-scope="data">
                 <div v-html="data.row[item.prop]"></div>
             </template>
-      </template>
         </el-table-column>
     </el-table>
 </template>
+<hr>
+<el-pagination background layout="prev, pager, next" :total="total" :page-size="limit"
+               @current-change="changePage"></el-pagination>
 {% endblock %}
 {% block js %}
 <script>
@@ -18,6 +30,10 @@
         data: {
             tableColumn: [],
             tableData: [],
+            search: '',
+            total: 0,
+            limit: 1,
+            offset: 0,
         },
         mounted() {//mounted类似Django进入路由之前经过的中间件，之前有些东西已经加载好了，所以可以用mounted来做（mounted是vue生命周期的一个回调方法）
             this.initData()//this指的是当前vue实例，如果用beforecreate和created可能this都不存在
@@ -25,11 +41,22 @@
         methods: {//方法集
             initData() {
                 let vm = this;//vue实例
-                axios.get('/api/surveys/').then(function (response) {
-                    console.log(response)
-                    vm.tableData = response.data.data.table_data
+                axios.get(`/api/surveys/?search=${vm.search}&limit=${vm.limit}&offset=${vm.offset}`).then(function (response) {
+                    // console.log(response)
+                    vm.total = response.data.data.table_data.total
+                    vm.tableData = response.data.data.table_data.data
                     vm.tableColumn = response.data.data.table_column
                 })
+            },
+            changePage(page) {
+                //console.log(page)//page是当前页
+                this.offset = (page - 1) * this.limit
+                this.initData()
+            },
+            searchData() {
+                //重置offset
+                this.offset = 0
+                this.initData()
             }
         }
     })
