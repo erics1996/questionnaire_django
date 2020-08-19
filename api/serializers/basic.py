@@ -75,6 +75,6 @@ class SurveySerializer(serializers.ModelSerializer):
             'app/components/handle.html',
             context={
                 'report_link': '',
-                'download_link': ''
+                'download_link': f'/{instance.pk}/download/'
             }
         )
