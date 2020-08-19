@@ -94,7 +94,7 @@ class SurveysApi(ListAPIView):
         :param data: serializer.data
         :return:
         """
-        print(data)
+        # print(data)
         """
         OrderedDict：有序的字典，通过双向链表实现，字典在3.6之前是无序的
         [OrderedDict([('grade', '计算机技术'), ('times', 1), ('valid_count', 0), ('handle_link', 'http://localhost:8000/1'), ('add_time', '2020-08-07 09:03:04'), ('handle', '<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">\n    <a class="btn btn-primary" href="">查看报告</a>\n</el-button>\n<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">\n    <a class="btn btn-danger" href="">下载</a>\n</el-button>')]), OrderedDict([('grade', '网络工程'), ('times', 2), ('valid_count', 0), ('handle_link', 'http://localhost:8000/2'), ('add_time', '2020-08-07 09:30:45'), ('handle', '<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">\n    <a class="btn btn-primary" href="">查看报告</a>\n</el-button>\n<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">\n    <a class="btn btn-danger" href="">下载</a>\n</el-button>')])]
