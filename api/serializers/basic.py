@@ -78,3 +78,63 @@ class SurveySerializer(serializers.ModelSerializer):
                 'download_link': f'/{instance.pk}/download/'
             }
         )
+
+
+class SurveyChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.SurveyChoice
+        fields = "__all__"
+
+
+class SurveyQuestionSerializer(serializers.ModelSerializer):
+    """
+    # 第一种方式
+    choices = serializers.SerializerMethodField()
+
+    def get_choices(self, instance):
+        # 获取问卷问题的所有选项surveychoice即SurveyChoice
+        # return instance.surveychoice_set.all()
+        # values():默认取所有
+        return list(instance.surveychoice_set.values())  # queryset=>list
+    """
+
+    # 第二种方式：使用子序列化器(反向查找，Question->SurveyChoice)，有related_name用related就可以了
+    # 这里有个问题SurveyChoice和SurveyQuestion不是多对多，而是多对一
+    choices = SurveyChoiceSerializer(many=True, source="surveychoice_set.all")
+
+    class Meta:
+        model = models.SurveyQuestion
+        # fields = '__all__'
+        fields = (
+            'id',
+            'survey_type',
+            'name',
+            'choices'
+        )
+
+
+class SurveyTemplateSerializer(serializers.ModelSerializer):
+    # 这是多对多（问卷模板和问卷问题），如果是外键(一对一和外键一个形式)就不用加many=True
+    question = SurveyQuestionSerializer(many=True)  # 等同于serializers.ListSerializer(child=None)
+
+    class Meta:
+        model = models.SurveyTemplate
+        # fields = "__all__"
+        fields = (
+            'id',
+            'name',
+            'question'
+        )
+
+
+class SurveyDetailSerializer(serializers.ModelSerializer):
+    survey_template = serializers.ListSerializer(child=SurveyTemplateSerializer())
+
+    class Meta:
+        # 正向查，一路使用点或者使用子序列化器
+        model = models.Survey
+        # fields = "__all__"
+        fields = (
+            'id',
+            'survey_template'
+        )
