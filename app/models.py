@@ -7,7 +7,7 @@ class ClassList(models.Model):
     name = models.CharField(max_length=32, verbose_name='班级名称')
 
     class Meta:
-        verbose_name_plural = '班级表'
+        verbose_name_plural = '班级管理'
 
     def __str__(self):
         return self.name
@@ -20,7 +20,7 @@ class SurveyTemplate(models.Model):
     add_time = models.DateTimeField(auto_now_add=True, verbose_name='添加的时间')
 
     class Meta:
-        verbose_name_plural = '问卷模板表'
+        verbose_name_plural = '问卷模板管理'
 
     def __str__(self):
         return self.name
@@ -35,8 +35,7 @@ class Survey(models.Model):
     survey_template = models.ManyToManyField('SurveyTemplate', blank=True, verbose_name='外键关联的模板表')
 
     class Meta:
-        verbose_name_plural = '问卷调查表'
-
+        verbose_name_plural = '问卷管理'
 
 
 class SurveyCode(models.Model):
@@ -47,7 +46,7 @@ class SurveyCode(models.Model):
     survey = models.ForeignKey('Survey', on_delete=models.CASCADE, verbose_name='外键关联问卷调查表')
 
     class Meta:
-        verbose_name_plural = '唯一码表'
+        verbose_name_plural = '唯一码管理'
 
 
 class SurveyQuestion(models.Model):
@@ -61,7 +60,7 @@ class SurveyQuestion(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = '问卷问题表'
+        verbose_name_plural = '问题管理'
 
 
 class SurveyChoice(models.Model):
@@ -72,7 +71,7 @@ class SurveyChoice(models.Model):
     question = models.ForeignKey('SurveyQuestion', on_delete=models.CASCADE, verbose_name="外键关联调查问卷问题表")
 
     class Meta:
-        verbose_name_plural = '问卷选项表'
+        verbose_name_plural = '问题选项管理'
 
     def __str__(self):
         return self.name
@@ -88,3 +87,6 @@ class SurveyRecord(models.Model):
     question = models.ForeignKey('SurveyQuestion', models.CASCADE, verbose_name='外键关联问卷的问题表')
     survey_code = models.ForeignKey('SurveyCode', models.CASCADE, verbose_name='外键关联唯一码表')
     survey = models.ForeignKey('Survey', models.CASCADE, verbose_name='外键关联问卷调查表')
+
+    class Meta:
+        verbose_name_plural = '填写问卷记录管理'

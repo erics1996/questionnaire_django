@@ -9,6 +9,9 @@ from urllib.parse import quote
 
 class IndexView(TemplateView):
     template_name = 'app/index.html'
+    extra_context = {
+        'title': '欢迎使用问卷调查系统'
+    }
 
 
 class DownloadView(TemplateView):
@@ -74,3 +77,10 @@ class DownloadView(TemplateView):
         )
         """
         return response
+
+
+class SurveyDetailView(TemplateView):
+    template_name = 'app/surveyDetail.html'
+    extra_context = {
+        'title': '请填写调查问卷'
+    }

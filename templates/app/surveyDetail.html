@@ -1,0 +1,57 @@
+{% extends 'app/public/layout.html' %}
+{% block content %}
+<div id="app">
+    <div class="container">
+        <div v-for="survey_template in survey.survey_template" :key="survey_template.id">
+            <h4>{% verbatim %}{{survey_template.name}}{% endverbatim %}</h4>
+            <hr>
+            <div>
+                <el-form ref="survey_template" :model="survey_template" label-width="80px" label-position="top">
+                    <el-form-item v-for="question in survey_template.question" :label="question.name"
+                                  :key="question.id">
+                        <el-input v-if="question.survey_type=='suggest'" type="textarea"
+                                  v-model="question.value"></el-input>
+                        <el-radio-group v-else v-model="question.value">
+                            <el-radio v-for="choice in question.choices" :label="choice.id" prop="choice.id"
+                                      :key="choice.id">
+                                {% verbatim %}{{choice.name}}{% endverbatim %}
+                            </el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+        <el-button type="primary">立即创建</el-button>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    let vm = new Vue({
+        el: "#app",
+        data() {
+            return {
+                survey: {}
+            }
+        },
+        methods: {
+            onSubmit() {
+                console.log('submit!');
+            },
+            initSurveyTemplate() {
+                axios.get('/api/survey/2')
+                    .then((response) => {
+                        console.log(response)
+                        this.survey = response.data
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            }
+        },
+        mounted() {
+            this.initSurveyTemplate()
+        }
+    })
+</script>
+{% endblock %}

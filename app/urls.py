@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.urls import path, re_path
-from .views import basic
+from .views import backend
 
 urlpatterns = [
-    path('', basic.IndexView.as_view()),
-    re_path('(?P<pk>\d+)/download/', basic.DownloadView.as_view())
+    path('', backend.IndexView.as_view()),
+    re_path('survey/(?P<pk>\d+)/', backend.SurveyDetailView.as_view()),
+    re_path('(?P<pk>\d+)/download/', backend.DownloadView.as_view())
 ]

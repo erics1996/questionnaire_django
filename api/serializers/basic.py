@@ -58,7 +58,7 @@ class SurveySerializer(serializers.ModelSerializer):
             }
         """
         request = self.context.get('request')  # 如果不调用get_serializer方法，需要自己去传
-        return f"{request.scheme}://{request.get_host()}/{instance.pk}"
+        return f"{request.scheme}://{request.get_host()}/survey/{instance.pk}"
 
     def get_handle(self, instance):
         """
@@ -101,6 +101,7 @@ class SurveyQuestionSerializer(serializers.ModelSerializer):
     # 第二种方式：使用子序列化器(反向查找，Question->SurveyChoice)，有related_name用related就可以了
     # 这里有个问题SurveyChoice和SurveyQuestion不是多对多，而是多对一
     choices = SurveyChoiceSerializer(many=True, source="surveychoice_set.all")
+    value = serializers.CharField(default='')
 
     class Meta:
         model = models.SurveyQuestion
@@ -109,7 +110,8 @@ class SurveyQuestionSerializer(serializers.ModelSerializer):
             'id',
             'survey_type',
             'name',
-            'choices'
+            'choices',
+            'value'
         )
 
 
