@@ -4,14 +4,15 @@
     <div class="form-group">
         <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
         <div class="input-group">
-            <input type="text" class="form-control" id="exampleInputAmount" placeholder="" v-model="search">
+            <input type="text" class="form-control" id="exampleInputAmount" placeholder="请输入调查问卷的班级" v-model="search">
         </div>
     </div>
     <button type="submit" class="btn btn-success" @click="searchData">查询</button>
 </div>
 <hr>
 <template>
-    <el-table :data="tableData" style="width: 100%;" @sort-change="orderingData">
+    <el-table :data="tableData" style="width: 100%;" @sort-change="orderingData" :header-cell-style="thStyleFun"
+              :cell-style="cellStyleFun">
         <el-table-column v-for="(item,index) in tableColumn" :prop="item.prop" :label="item.label" sortable>
             <template slot-scope="data">
                 <div v-html="data.row[item.prop]"></div>
@@ -68,6 +69,12 @@
                     this.ordering = orderColumn;
                 }
                 this.initData();
+            },
+            thStyleFun() {
+                return 'text-align:center'
+            },
+            cellStyleFun() {
+                return 'text-align:center'
             }
         }
     })

@@ -1,4 +1,5 @@
 from rest_framework.generics import ListAPIView
+from rest_framework.generics import RetrieveAPIView
 from ..serializers import basic
 from app import models
 from rest_framework.response import Response
@@ -20,6 +21,7 @@ class CustomFilter(filters.BaseFilterBackend):
         return qs
 
 
+# 获取多条数据用ListAPIView
 class SurveysApi(ListAPIView):
     """
     获取一组数据需要：model和序列化器。不需要写gey请求，视图的逻辑，ListAPIView都帮我们做了，这里为了返回指定的数据，重新写了一些视图逻辑！
@@ -118,3 +120,9 @@ class SurveysApi(ListAPIView):
                 },
             }
         })
+
+
+# 获取单条数据用RetrieveAPIView
+class SurveysDetailApi(RetrieveAPIView):
+    queryset = models.Survey.objects.all()
+    serializer_class = basic.SurveyDetailSerializer
